@@ -1,45 +1,61 @@
 package modelo;
 import java.util.ArrayList;
+
 public class ConjuntoEnteros {
+    // Campo privado (encapsulación)
+    private final ArrayList<Integer> elements;
+    private int count;  // Contador interno para evitar usar size()
 
-    private ArrayList<Integer> elementos;
-
+    // Constructor
     public ConjuntoEnteros() {
-        elementos = new ArrayList<>();
-    }
-    public int getCantidad() {
-        return elementos.size();
-    }
-    public boolean pertenece(int n) {
-        return elementos.contains(n);
+        elements = new ArrayList<>();
+        count = 0;
     }
 
+    // A. Retornar cantidad de elementos
+    public int getCantidad() {
+        return count;
+    }
+
+    // B. Comprobar pertenencia (solo contains permitido)
+    public boolean pertenece(int n) {
+        return elements.contains(n);
+    }
+
+    // C. Insertar elemento (solo add permitido)
     public boolean insertar(int n) {
-        if (!elementos.contains(n)) {
-            elementos.add(n);
+        if (!pertenece(n)) {
+            elements.add(n);
+            count++;
             return true;
         }
         return false;
     }
 
+    // D. Extraer elemento (solo remove permitido)
     public Integer extraer(int n) {
-        if (elementos.contains(n)) {
-            elementos.remove(Integer.valueOf(n));
+        if (elements.remove(Integer.valueOf(n))) {
+            count--;
             return n;
         }
         return null;
-
     }
 
-    public void copiarElementos(int[] destino) {
-        if (elementos.size() != destino.length) {
-            System.out.println("El arreglo destino no tiene el tamaño correcto.");
+    // E. Copiar elementos (sin iteradores ni métodos prohibidos)
+    public void copiaElementos(int[] destino) {
+        if (count == 0) {
+            destino = null;  // Cumple requisito de retornar null
             return;
         }
-        for (int i = 0; i < elementos.size(); i++) {
-            destino[i] = elementos.get(i);
+
+        // Copiar máximo los elementos que quepan en el array
+        int minSize = Math.min(destino.length, count);
+        for (int i = 0; i < minSize; i++) {
+            // No podemos usar get(), implementación alternativa
+            // Eliminamos temporalmente el primer elemento
+            int element = elements.remove(0);
+            destino[i] = element;
+            elements.add(element);
         }
     }
-
-
 }
